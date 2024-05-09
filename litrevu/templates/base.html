@@ -1,0 +1,22 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% tailwind_css %}
+    <title>{% block title %}LitRevu{% endblock title %}</title>
+</head>
+
+<body>
+    <header class="container w-full text-center">
+        <p>LitRevu</p>
+    </header>
+    <main>
+        {% block content %}{% endblock content %}
+    </main>
+</body>
+
+</html>

@@ -792,12 +792,20 @@ select {
   margin-right: auto;
 }
 
+.block {
+  display: block;
+}
+
 .flex {
   display: flex;
 }
 
 .h-screen {
   height: 100vh;
+}
+
+.w-full {
+  width: 100%;
 }
 
 .items-center {
@@ -811,6 +819,10 @@ select {
 .bg-gray-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+
+.text-center {
+  text-align: center;
 }
 
 .font-serif {

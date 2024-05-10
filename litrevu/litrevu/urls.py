@@ -21,6 +21,7 @@ from django.urls import include, path
 from authentication.views import SignInView
 
 urlpatterns = [
+    path("reviews/", include("reviews.urls")),
     path("accounts/", include("authentication.urls")),
     path("admin/", admin.site.urls),
     path("", SignInView.as_view(), name="signin"),

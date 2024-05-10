@@ -1,0 +1,8 @@
+<h2>Hi</h2>
+{% if latest_review_list %}
+{% for review in latest_review_list %}
+<h2>Reviews</h2>
+{% endfor %}
+{% else %}
+<h2>Aucune review</h2>
+{% endif %}

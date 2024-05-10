@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="post" class="flex flex-col gap-2 w-full">
+    {% csrf_token %}
+    <span class="text-red-500">
+        {{ form.non_field_errors }}
+    </span>
+    <div class="w-full px-4 flex flex-col">
+        <label for="{{ form.title.id_for_label }}" class="visually-hidden">Titre:</label>
+        {{ form.title }}
+        <span class="text-red-500">
+            {{ form.title.errors }}
+        </span>
+        <span class="italic">
+            {{ form.title.help_text}}
+        </span>
+    </div>
+    <div class="w-full px-4 flex flex-col">
+        <label for="{{ form.description.id_for_label }}" class="visually-hidden">Description:</label>
+        {{ form.description }}
+        <span class="text-red-500">
+            {{ form.description.errors }}
+        </span>
+        <span class="italic">
+            {{ form.description.help_text}}
+        </span>
+    </div>
+    <div class="w-full px-4 flex flex-col">
+        <div class="">
+            <label for="{{ form.image.id_for_label }}" class="">Image: </label>
+            {{ form.image }}
+        </div>
+        <span class="text-red-500">
+            {{ form.image.errors }}
+        </span>
+        <span class="italic">
+            {{ form.image.help_text}}
+        </span>
+    </div>
+    <button type="submit"
+        class="max-w-40 self-end rounded border border-gray-300 px-3 py-1 bg-blue-500 text-white">Envoyer</button>
+</form>
+{% endblock  %}

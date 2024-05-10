@@ -1,8 +1,25 @@
-<h2>Hi</h2>
-{% if latest_review_list %}
-{% for review in latest_review_list %}
-<h2>Reviews</h2>
+{% extends 'base.html' %}
+{% block content %}
+<div class="container flex flex-wrap justify-evenly items-center px-10 py-5">
+    <button class="rounded border border-gray-300 px-3 py-1 bg-blue-500 text-white">
+        <a href="{% url 'reviews:new_ticket' %}">
+            Demander une critique
+        </a>
+    </button>
+    <button class="rounded border border-gray-300 px-3 py-1 bg-blue-500 text-white">
+        Poster une critique
+    </button>
+</div>
+{% if review_list %}
+{% for review in review_list %}
+{{ review.title }}
 {% endfor %}
 {% else %}
-<h2>Aucune review</h2>
+<div class="container text-center">
+    <h2>Aucune critique dans votre flux...</h2>
+    <p>
+        Essayez de suivre d'autres utilisateurs ou bien créez une critique ou un billet.
+    </p>
+</div>
 {% endif %}
+{% endblock  %}

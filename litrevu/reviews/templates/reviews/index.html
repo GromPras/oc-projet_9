@@ -10,9 +10,38 @@
         Poster une critique
     </button>
 </div>
-{% if review_list %}
-{% for review in review_list %}
-{{ review.title }}
+{% if feed %}
+{% for post in feed %}
+{% if post.title %}
+{% comment "" %}
+If the post has a title its a ticket
+{% endcomment %}
+<div class="container flex shadow rounded-xl">
+    <img src="{{ post.image.url }}" alt={{ post.title }} class="rounded-tl-xl rounded-bl-xl">
+    <div class="flex flex-col p-4 justify-evenly relative">
+        <h2 class="font-bold uppercase text-lg">{{ post.title }}</h2>
+        <p class="flex-1">{{ post.description }}</p>
+        <p class="italic place-self-end"><span class="font-bold underline">{{ post.user.username }}</span> a demandé une
+            critique -
+            {{ post.time_created|date:"D d M Y" }}</p>
+        <button
+            class="text-white hover:text-gray-900 absolute top-0 right-0 p-2 m-2 rounded-full bg-blue-500 shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path
+                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                <path fill-rule="evenodd"
+                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+            </svg>
+        </button>
+    </div>
+</div>
+{% else %}
+{% comment "" %}
+else, its a review
+{% endcomment %}
+{{post.rating}}
+{% endif %}
 {% endfor %}
 {% else %}
 <div class="container text-center">

@@ -29,6 +29,14 @@ class FeedView(ListView):
         )
         return feed
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get the context
+        context = super(FeedView, self).get_context_data(**kwargs)
+        current_user = User.objects.get(pk=self.request.user.id)
+        # Create any data and add it to the context
+        context["current_user"] = current_user
+        return context
+
 
 class NewTicketView(CreateView):
     model = Ticket

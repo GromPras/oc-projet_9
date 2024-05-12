@@ -22,19 +22,30 @@
         If the post has a title its a ticket
         {% endcomment %}
         <div class="container flex shadow-lg rounded-xl">
-            <img src="{{ post.image.url }}" alt={{ post.title }} class="rounded-tl-xl rounded-bl-xl">
+            <img src="{{ post.image.url }}" alt={{ post.title }} class="rounded-tl-xl rounded-bl-xl w-1/4">
             <div class="flex flex-col justify-start w-full">
                 <div class="flex flex-col p-4 flex-1">
                     <h2 class="font-bold uppercase text-lg">{{ post.title }}</h2>
                     <p>{{ post.description }}</p>
                 </div>
                 <div class="flex text-white justify-between">
-                    <p class="italic place-self-end px-4 py-2 bg-blue-500 flex-1"><span
-                            class="font-bold underline">{{ post.user.username }}</span>
-                        a demandé
+                    <p class="italic place-self-end px-4 py-2 bg-blue-500 flex-1">
+                        {% if post.user.username != current_user.username %}
+                        <span class="font-bold">
+                            {{ post.user.username }}
+                        </span>
+                        a
+                        {% else %}
+                        <span class="font-bold">
+                            vous
+                        </span>
+                        avez
+                        {% endif %}
+                        demandé
                         une
-                        critique -
-                        {{ post.time_created|date:"D d M Y" }}</p>
+                        critique le
+                        {{ post.time_created|date:"D d M Y" }}
+                    </p>
                     <button
                         class="bg-green-600 text-white hover:text-gray-900 hover:bg-green-400 flex items-center px-4 py-2 gap-4 rounded-br-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"

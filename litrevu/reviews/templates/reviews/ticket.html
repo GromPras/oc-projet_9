@@ -1,0 +1,59 @@
+<div class="container flex shadow-lg rounded-xl">
+    <img src="{{ post.image.url }}" alt={{ post.title }} class="rounded-tl-xl rounded-bl-xl w-1/4">
+    <div class="flex flex-col justify-start w-full relative group/card">
+        <div class="flex flex-col p-4 flex-1">
+            <h2 class="font-bold uppercase text-lg">{{ post.title }}</h2>
+            <p>{{ post.description }}</p>
+        </div>
+        <div class="flex text-white justify-between">
+            <p class="italic place-self-end px-4 py-2 bg-blue-500 flex-1 last:rounded-br-xl">
+                {% if post.user.username != current_user.username %}
+                <span class="font-bold">
+                    {{ post.user.username }}
+                </span>
+                a
+                {% else %}
+                <span class="font-bold">
+                    vous
+                </span>
+                avez
+                {% endif %}
+                demandé
+                une
+                critique le
+                {{ post.time_created|date:"D d M Y" }}
+            </p>
+            {% if not response and not post.responded %}
+            <a href="{% url 'reviews:new_review' post.id %}">
+                <button
+                    class="bg-green-600 text-white hover:text-gray-900 hover:bg-green-400 flex items-center px-4 py-2 gap-4 last:rounded-br-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-reply" viewBox="0 0 16 16">
+                        <path
+                            d="M6.598 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.7 8.7 0 0 0-1.921-.306 7 7 0 0 0-.798.008h-.013l-.005.001h-.001L7.3 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L2.614 8.254l-.042-.028a.147.147 0 0 1 0-.252l.042-.028zM7.8 10.386q.103 0 .223.006c.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96z" />
+                    </svg>
+                    Répondre au billet
+                </button>
+            </a>
+            {% endif %}
+            {% if post.user == current_user %}
+            <a href="{% url 'reviews:update_ticket' post.id %}"
+                class="invisible group-hover/card:visible transition-all delay-150 group/button">
+                <button class="absolute top-0 right-0 m-8 rounded-full bg-blue-500 p-2 flex gap-2 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path
+                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd"
+                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                    </svg>
+                    <span
+                        class="hidden invisible transition-all delay-150 group-hover/button:inline-block group-hover/button:visible">
+                        Modifier
+                    </span>
+                </button>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>

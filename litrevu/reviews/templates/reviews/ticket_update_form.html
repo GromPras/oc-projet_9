@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action="" method="post" class="flex flex-col gap-2 w-full">
+<form action="" method="post" class="flex flex-col gap-2 w-full" enctype='multipart/form-data'>
     {% csrf_token %}
     <span class="text-red-500">
         {{ form.non_field_errors }}

@@ -8,7 +8,7 @@
     </button>
     <button
         class="rounded border border-gray-300 px-3 py-1 bg-green-600 text-white hover:text-gray-900 hover:bg-green-400">
-        <a href="{% url 'reviews:new_ticket' %}">
+        <a href="{% url 'reviews:new_ticket_review' %}">
             Poster une critique
         </a>
     </button>
@@ -21,50 +21,12 @@
         {% comment "" %}
         If the post has a title its a ticket
         {% endcomment %}
-        <div class="container flex shadow-lg rounded-xl">
-            <img src="{{ post.image.url }}" alt={{ post.title }} class="rounded-tl-xl rounded-bl-xl w-1/4">
-            <div class="flex flex-col justify-start w-full">
-                <div class="flex flex-col p-4 flex-1">
-                    <h2 class="font-bold uppercase text-lg">{{ post.title }}</h2>
-                    <p>{{ post.description }}</p>
-                </div>
-                <div class="flex text-white justify-between">
-                    <p class="italic place-self-end px-4 py-2 bg-blue-500 flex-1">
-                        {% if post.user.username != current_user.username %}
-                        <span class="font-bold">
-                            {{ post.user.username }}
-                        </span>
-                        a
-                        {% else %}
-                        <span class="font-bold">
-                            vous
-                        </span>
-                        avez
-                        {% endif %}
-                        demandé
-                        une
-                        critique le
-                        {{ post.time_created|date:"D d M Y" }}
-                    </p>
-                    <button
-                        class="bg-green-600 text-white hover:text-gray-900 hover:bg-green-400 flex items-center px-4 py-2 gap-4 rounded-br-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            class="bi bi-pencil-square" viewBox="0 0 16 16">
-                            <path
-                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                            <path fill-rule="evenodd"
-                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                        </svg>
-                        Répondre au billet
-                    </button>
-                </div>
-            </div>
-        </div>
+        {% include 'reviews/ticket.html' %}
         {% else %}
         {% comment "" %}
         else, its a review
         {% endcomment %}
-        {{post.rating}}
+        {% include 'reviews/review.html' %}
         {% endif %}
     </li>
     {% endfor %}

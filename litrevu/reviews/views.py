@@ -1,27 +1,36 @@
 from itertools import chain
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from authentication.models import User
 
 from .models import Review, Ticket
-from .forms import NewTicketForm
+from .forms import NewTicketForm, NewReviewForm, NewTicketReviewFormSet
 
 
-class FeedView(ListView):
+class FeedView(LoginRequiredMixin, ListView):
     template_name = "reviews/index.html"
     context_object_name = "feed"
 
     def get_queryset(self):
         # TODO: filter by user followed
-        current_user = User.objects.get(pk=self.request.user.id)
+        current_user = self.request.user
         ticket_list = Ticket.objects.all().order_by("time_created")
-        reviews_list = Review.objects.filter(user=current_user).order_by(
+        reviews_list = Review.objects.filter(user=current_user.id).order_by(
             "time_created"
-        ) | Review.objects.filter(ticket__user=current_user).order_by(
+        ) | Review.objects.filter(ticket__user=current_user.id).order_by(
             "time_created"
         )
+        for r in reviews_list:
+            if r.user.id == current_user.id:
+                for ticket in ticket_list:
+                    if ticket.id == r.ticket.id:
+                        ticket.responded = True
+
         feed = sorted(
             chain(ticket_list, reviews_list),
             key=lambda i: i.time_created,
@@ -38,17 +47,70 @@ class FeedView(ListView):
         return context
 
 
-class NewTicketView(CreateView):
+class NewTicketView(LoginRequiredMixin, CreateView):
     model = Ticket
     form_class = NewTicketForm
-    template_name = "reviews/new_ticket.html"
+    template_name = "reviews/ticket_update_form.html"
     success_url = reverse_lazy("reviews:feed")
 
     def form_valid(self, form):
         ticket = form.save(commit=False)
         request_user = self.request.user
-        current_user = User.objects.get(id=request_user.id)
-        print(current_user)
-        ticket.user = current_user
+        ticket.user_id = request_user.id
         ticket.save()
         return HttpResponseRedirect(self.success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            print(self.request.FILES)
+        return context
+
+
+class UpdateTicketView(LoginRequiredMixin, UpdateView):
+    model = Ticket
+    form_class = NewTicketForm
+    template_name = "reviews/ticket_update_form.html"
+    success_url = reverse_lazy("reviews:feed")
+
+
+class NewTicketReviewView(LoginRequiredMixin, CreateView):
+    model = Ticket
+    form_class = NewTicketForm
+    template_name = "reviews/review_update_form.html"
+    success_url = reverse_lazy("reviews:feed")
+
+    def get_context_data(self, **kwargs):
+        data = super(NewTicketReviewView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data["review"] = NewTicketReviewFormSet(self.request.POST)
+        else:
+            data["review"] = NewTicketReviewFormSet()
+        return data
+
+
+@login_required(login_url="authentication/signin")
+def NewReviewView(request, ticket_id=None):
+    model = Review
+    ticket = Ticket.objects.get(pk=ticket_id)
+    if ticket is not None:
+        form_class = NewReviewForm(initial={"ticket": ticket})
+    else:
+        form_class = NewReviewForm()
+    template_name = "reviews/review_update_form.html"
+    success_url = reverse_lazy("reviews:feed")
+
+    if request.method == "POST":
+        form = NewReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            request_user = request.user
+            review.user_id = current_user.id
+            form.save()
+            return HttpResponseRedirect(reverse_lazy("reviews:feed"))
+
+    return render(
+        request,
+        "reviews/new_review.html",
+        {"form": NewReviewForm(initial={"ticket": ticket}), "ticket": ticket},
+    )

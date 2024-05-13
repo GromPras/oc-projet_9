@@ -12,8 +12,9 @@
             {{ post.time_created|date:"D d M Y"}}
         </p>
     </div>
-    <div class="flex">
-        <h2>{{ post.headline }} - {{ post.rating }}</h2>
+    <div class="flex items-center gap-2">
+        <p class="rounded bg-blue-200 px-2 py-1">{{post.rating}} <span class="text-amber-500">🟊</span></p>
+        <h2 class="italic font-bold text-lg">{{ post.headline }}</h2>
     </div>
     <div class="p">
         {{ post.body }}

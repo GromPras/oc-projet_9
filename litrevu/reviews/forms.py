@@ -31,7 +31,9 @@ class NewTicketForm(forms.ModelForm):
 
 
 class NewReviewForm(forms.ModelForm):
-    CHOICES = [(str(i), f"Option {i}") for i in range(0, 6)]
+    CHOICES = [
+        (str(i), "🟊" * i) if i > 0 else (str(i), "☹") for i in range(0, 6)
+    ]
 
     class Meta:
         model = Review
@@ -56,7 +58,10 @@ class NewReviewForm(forms.ModelForm):
         ),
     )
 
-    rating = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
+    rating = forms.ChoiceField(
+        widget=forms.RadioSelect(attrs={"class": "radio-input"}),
+        choices=CHOICES,
+    )
 
 
 class NewTicketReviewForm(forms.ModelForm):

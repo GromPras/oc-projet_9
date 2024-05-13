@@ -12,7 +12,36 @@
     <span class="text-red-500">
         {{ form.non_field_errors }}
     </span>
-    {{ form }}
+    <div class="w-full px-4 flex gap-4 items-center">
+        <label for="{{ form.rating.id_for_label }}" class="">Note: </label>
+        {{ form.rating }}
+        <span class="text-red-500">
+            {{ form.rating.errors }}
+        </span>
+        <span class="italic">
+            {{ form.rating.help_text}}
+        </span>
+    </div>
+    <div class="w-full px-4 flex flex-col">
+        <label for="{{ form.headline.id_for_label }}" class="visually-hidden">Titre: </label>
+        {{ form.headline }}
+        <span class="text-red-500">
+            {{ form.headline.errors }}
+        </span>
+        <span class="italic">
+            {{ form.headline.help_text}}
+        </span>
+    </div>
+    <div class="w-full px-4 flex flex-col">
+        <label for="{{ form.body.id_for_label }}" class="visually-hidden">Critique: </label>
+        {{ form.body }}
+        <span class="text-red-500">
+            {{ form.body.errors }}
+        </span>
+        <span class="italic">
+            {{ form.body.help_text}}
+        </span>
+    </div>
     <button type="submit"
         class="max-w-40 self-end rounded border border-gray-300 px-3 py-1 bg-blue-500 text-white">Envoyer</button>
 </form>

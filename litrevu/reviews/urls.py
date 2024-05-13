@@ -15,12 +15,12 @@ urlpatterns = [
     ),
     path(
         "review/new/<int:ticket_id>",
-        views.NewReviewView,
-        name="new_review",
+        views.NewTicketReviewView,
+        name="new_ticket_review",
     ),
     path(
         "review/new/",
-        views.NewTicketReviewView.as_view(),
-        name="new_ticket_review",
+        views.NewReviewView.as_view(),
+        name="new_review",
     ),
 ]

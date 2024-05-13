@@ -74,23 +74,17 @@ class UpdateTicketView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("reviews:feed")
 
 
-class NewTicketReviewView(LoginRequiredMixin, CreateView):
+class NewReviewView(LoginRequiredMixin, CreateView):
     model = Ticket
     form_class = NewTicketForm
     template_name = "reviews/review_update_form.html"
     success_url = reverse_lazy("reviews:feed")
 
-    def get_context_data(self, **kwargs):
-        data = super(NewTicketReviewView, self).get_context_data(**kwargs)
-        if self.request.POST:
-            data["review"] = NewTicketReviewFormSet(self.request.POST)
-        else:
-            data["review"] = NewTicketReviewFormSet()
-        return data
+    pass
 
 
 @login_required(login_url="authentication/signin")
-def NewReviewView(request, ticket_id=None):
+def NewTicketReviewView(request, ticket_id=None):
     model = Review
     ticket = Ticket.objects.get(pk=ticket_id)
     if ticket is not None:
@@ -104,13 +98,14 @@ def NewReviewView(request, ticket_id=None):
         form = NewReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
+            review.ticket_id = ticket.id
             request_user = request.user
-            review.user_id = current_user.id
+            review.user_id = request_user.id
             form.save()
             return HttpResponseRedirect(reverse_lazy("reviews:feed"))
 
     return render(
         request,
-        "reviews/new_review.html",
+        "reviews/review_update_form.html",
         {"form": NewReviewForm(initial={"ticket": ticket}), "ticket": ticket},
     )

@@ -1,5 +1,9 @@
 <div class="container flex shadow-lg rounded-xl">
+    {% if post.image %}
     <img src="{{ post.image.url }}" alt={{ post.title }} class="rounded-tl-xl rounded-bl-xl w-1/4">
+    {% else %}
+    <img src="/media/image-not-found-icon.webp" alt={{ post.title }} class="rounded-tl-xl rounded-bl-xl w-1/4">
+    {% endif %}
     <div class="flex flex-col justify-start w-full relative group/card">
         <div class="flex flex-col p-4 flex-1">
             <h2 class="font-bold uppercase text-lg">{{ post.title }}</h2>

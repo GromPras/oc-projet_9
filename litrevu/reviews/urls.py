@@ -14,13 +14,13 @@ urlpatterns = [
         name="update_ticket",
     ),
     path(
-        "review/new/<int:ticket_id>",
+        "review/new/",
         views.NewTicketReviewView,
         name="new_ticket_review",
     ),
     path(
-        "review/new/",
-        views.NewReviewView.as_view(),
-        name="new_review",
+        "review/new/<int:ticket_id>",
+        views.NewTicketReviewView,
+        name="new_ticket_review",
     ),
 ]

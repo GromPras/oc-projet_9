@@ -1,47 +1,60 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="flex flex-col p-4 border gap-2">
-    <h2>Vous êtes en train de poster en réponse à: </h2>
-    <div class="ml-8">
-        {% include 'reviews/ticket.html' with post=ticket response=True %}
-    </div>
-</div>
-<form action="" method="post" class="flex flex-col gap-2 w-full">
+<form action="" method="post" class="flex flex-col gap-2 w-full" enctype="multipart/form-data">
     {% csrf_token %}
-    <span class="text-red-500">
-        {{ form.non_field_errors }}
-    </span>
-    <div class="w-full px-4 flex gap-4 items-center">
-        <label for="{{ form.rating.id_for_label }}" class="">Note: </label>
-        {{ form.rating }}
-        <span class="text-red-500">
-            {{ form.rating.errors }}
-        </span>
-        <span class="italic">
-            {{ form.rating.help_text}}
-        </span>
+    {% if ticket %}
+    <div class="flex flex-col p-4 border gap-2">
+        <h2>Vous êtes en train de poster en réponse à: </h2>
+        <div class="ml-8">
+            {% include 'reviews/ticket.html' with post=ticket response=True %}
+        </div>
     </div>
-    <div class="w-full px-4 flex flex-col">
-        <label for="{{ form.headline.id_for_label }}" class="visually-hidden">Titre: </label>
-        {{ form.headline }}
+    {% else %}
+    <fieldset>
+        <legend>Billet: </legend>
+        <div class="px-4">
+
+            {{ ticket_form }}
+        </div>
+    </fieldset>
+    {% endif %}
+    <fieldset>
+        <legend>Critique: </legend>
         <span class="text-red-500">
-            {{ form.headline.errors }}
+            {{ review_form.non_field_errors }}
         </span>
-        <span class="italic">
-            {{ form.headline.help_text}}
-        </span>
-    </div>
-    <div class="w-full px-4 flex flex-col">
-        <label for="{{ form.body.id_for_label }}" class="visually-hidden">Critique: </label>
-        {{ form.body }}
-        <span class="text-red-500">
-            {{ form.body.errors }}
-        </span>
-        <span class="italic">
-            {{ form.body.help_text}}
-        </span>
-    </div>
+        <div class="w-full px-4 flex gap-4 items-center">
+            <label for="{{ review_form.rating.id_for_label }}" class="">Note: </label>
+            {{ review_form.rating }}
+            <span class="text-red-500">
+                {{ review_form.rating.errors }}
+            </span>
+            <span class="italic">
+                {{ review_form.rating.help_text}}
+            </span>
+        </div>
+        <div class="w-full px-4 flex flex-col">
+            <label for="{{ review_form.headline.id_for_label }}" class="visually-hidden">Titre: </label>
+            {{ review_form.headline }}
+            <span class="text-red-500">
+                {{ review_form.headline.errors }}
+            </span>
+            <span class="italic">
+                {{ review_form.headline.help_text}}
+            </span>
+        </div>
+        <div class="w-full px-4 flex flex-col">
+            <label for="{{ review_form.body.id_for_label }}" class="visually-hidden">Critique: </label>
+            {{ review_form.body }}
+            <span class="text-red-500">
+                {{ review_form.body.errors }}
+            </span>
+            <span class="italic">
+                {{ review_form.body.help_text}}
+            </span>
+        </div>
+    </fieldset>
     <button type="submit"
         class="max-w-40 self-end rounded border border-gray-300 px-3 py-1 bg-blue-500 text-white">Envoyer</button>
 </form>

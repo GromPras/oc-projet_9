@@ -27,7 +27,7 @@ class NewTicketForm(forms.ModelForm):
         ),
     )
 
-    image = forms.FileField(widget=forms.FileInput())
+    image = forms.FileField(required=False, widget=forms.FileInput())
 
 
 class NewReviewForm(forms.ModelForm):

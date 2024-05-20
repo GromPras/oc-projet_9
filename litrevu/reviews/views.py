@@ -30,6 +30,8 @@ class FeedView(LoginRequiredMixin, ListView):
                 for ticket in ticket_list:
                     if ticket.id == r.ticket.id:
                         ticket.responded = True
+                    if ticket.image is None:
+                        ticket.image.url = "ticket_placeholder.webp"
 
         feed = sorted(
             chain(ticket_list, reviews_list),
@@ -74,38 +76,47 @@ class UpdateTicketView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("reviews:feed")
 
 
-class NewReviewView(LoginRequiredMixin, CreateView):
-    model = Ticket
-    form_class = NewTicketForm
-    template_name = "reviews/review_update_form.html"
-    success_url = reverse_lazy("reviews:feed")
-
-    pass
-
-
 @login_required(login_url="authentication/signin")
 def NewTicketReviewView(request, ticket_id=None):
-    model = Review
-    ticket = Ticket.objects.get(pk=ticket_id)
+    review_model = Review
+    ticket = None
+    if ticket_id:
+        ticket = Ticket.objects.get(pk=ticket_id)
+    review_form = None
+    ticket_form = None
     if ticket is not None:
-        form_class = NewReviewForm(initial={"ticket": ticket})
+        review_form = NewReviewForm(initial={"ticket": ticket})
     else:
-        form_class = NewReviewForm()
+        review_form = NewReviewForm()
+        ticket_form = NewTicketForm()
     template_name = "reviews/review_update_form.html"
     success_url = reverse_lazy("reviews:feed")
 
     if request.method == "POST":
-        form = NewReviewForm(request.POST)
-        if form.is_valid():
-            review = form.save(commit=False)
+        request_user = request.user
+        ticket_form = NewTicketForm(
+            request.POST,
+            request.FILES,
+        )
+        if ticket_form.is_valid():
+            ticket = ticket_form.save(commit=False)
+            ticket.user_id = request_user.id
+            ticket.save()
+
+        review_form = NewReviewForm(request.POST)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
             review.ticket_id = ticket.id
-            request_user = request.user
             review.user_id = request_user.id
-            form.save()
+            review.save()
             return HttpResponseRedirect(reverse_lazy("reviews:feed"))
 
     return render(
         request,
         "reviews/review_update_form.html",
-        {"form": NewReviewForm(initial={"ticket": ticket}), "ticket": ticket},
+        {
+            "review_form": review_form,
+            "ticket": ticket,
+            "ticket_form": ticket_form,
+        },
     )

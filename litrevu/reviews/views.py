@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.views import View
 from django.views.generic import CreateView, ListView, UpdateView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
@@ -85,25 +86,35 @@ class UpdateTicketView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("reviews:feed")
 
 
-# TODO: rewrite view as Class
-@login_required(login_url="authentication/signin")
-def NewTicketReviewView(request, ticket_id=None):
+class NewTicketReviewView(LoginRequiredMixin, View):
     review_model = Review
     ticket = None
-    if ticket_id:
-        ticket = Ticket.objects.get(pk=ticket_id)
-    review_form = None
-    ticket_form = None
-    if ticket is not None:
-        review_form = NewReviewForm(initial={"ticket": ticket})
-    else:
-        review_form = NewReviewForm()
-        ticket_form = NewTicketForm()
-    template_name = "reviews/review_update_form.html"
-    success_url = reverse_lazy("reviews:feed")
 
-    if request.method == "POST":
-        request_user = request.user
+    def get(self, request):
+        if self.request.GET.get("ticket_id"):
+            self.ticket = Ticket.objects.get(pk=ticket_id)
+        review_form = None
+        ticket_form = None
+        if self.ticket is not None:
+            review_form = NewReviewForm(initial={"ticket": ticket})
+        else:
+            review_form = NewReviewForm()
+            ticket_form = NewTicketForm()
+        template_name = "reviews/review_update_form.html"
+        success_url = reverse_lazy("reviews:feed")
+
+        return render(
+            request,
+            "reviews/review_update_form.html",
+            {
+                "review_form": review_form,
+                "ticket": self.ticket,
+                "ticket_form": ticket_form,
+            },
+        )
+
+    def post(self, request):
+        request_user = self.request.user
         ticket_form = NewTicketForm(
             request.POST,
             request.FILES,
@@ -120,13 +131,3 @@ def NewTicketReviewView(request, ticket_id=None):
             review.user_id = request_user.id
             review.save()
             return HttpResponseRedirect(reverse_lazy("reviews:feed"))
-
-    return render(
-        request,
-        "reviews/review_update_form.html",
-        {
-            "review_form": review_form,
-            "ticket": ticket,
-            "ticket_form": ticket_form,
-        },
-    )

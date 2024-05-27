@@ -20,7 +20,6 @@ class FeedView(LoginRequiredMixin, ListView):
     context_object_name = "feed"
 
     def get_queryset(self):
-        # TODO: filter by user followed
         current_user = self.request.user
         followed_users = UserFollows.objects.filter(
             user__id=current_user.id

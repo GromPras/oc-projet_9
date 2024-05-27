@@ -14,8 +14,25 @@
 </head>
 
 <body class="flex flex-col content-center items-center w-full gap-4">
-    <header class="w-full text-center bg-blue-500 text-white px-4 py-2">
-        <a href="{% url 'reviews:feed' %}">LITReview</a>
+    <header class="w-full text-center bg-blue-500 text-white px-4 py-2 flex justify-between">
+        <div class="w-1/3"></div>
+        <a href="{% url 'reviews:feed' %}" class="flex-1">LITReview</a>
+        <nav class="w-1/3">
+            <ul class="flex justify-end gap-4">
+                <li>
+                    <a href="{% url 'reviews:feed' %}">Flux</a>
+                </li>
+                <li>
+                    <a href="#">Posts</a>
+                </li>
+                <li>
+                    <a href="{% url 'community:search' %}">Abonnements</a>
+                </li>
+                <li>
+                    <a href="{% url 'authentication:signout' %}">Se déconnecter</a>
+                </li>
+            </ul>
+        </nav>
     </header>
     <main class="container p-2">
         {% block content %}{% endblock %}

@@ -3,14 +3,14 @@
         {{ user.username }}
     </h2>
     {% if not followed %}
-    <button class="rounded-tr rounded-br border border-gray-300 px-3 py-1 bg-blue-500 text-white  hover:bg-blue-700">
+    <button class="rounded-tr rounded-br border border-gray-300 px-3 py-1 bg-blue-800 text-white  hover:bg-blue-700">
         <a href="{% url 'community:subscribe' user.id %}">
             S'abonner
         </a>
     </button>
     {% else %}
     <button
-        class="rounded-tr rounded-br border border-gray-300 px-3 py-1 bg-green-600 text-white hover:text-gray-900 hover:bg-green-400">
+        class="rounded-tr rounded-br border border-gray-300 px-3 py-1 bg-green-600 hover:text-gray-900 hover:bg-green-400">
         <a href="{% url 'community:unsubscribe' user.id %}">
             Se désabonner
         </a>

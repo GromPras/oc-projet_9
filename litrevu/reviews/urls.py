@@ -23,4 +23,5 @@ urlpatterns = [
         views.NewTicketReviewView.as_view(),
         name="new_ticket_review",
     ),
+    path("posts/", views.PostsView.as_view(), name="posts"),
 ]

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1 class="text-center text-xl font-bold">Poster une critique:</h1>
 <form action="" method="post" class="flex flex-col gap-2 w-full" enctype="multipart/form-data">
     {% csrf_token %}
     {% if ticket %}
@@ -25,7 +26,7 @@
             {{ review_form.non_field_errors }}
         </span>
         <div class="w-full px-4 flex gap-4 items-center">
-            <label for="{{ review_form.rating.id_for_label }}" class="">Note: </label>
+            <p>Note:</p>
             {{ review_form.rating }}
             <span class="text-red-500">
                 {{ review_form.rating.errors }}
@@ -56,6 +57,6 @@
         </div>
     </fieldset>
     <button type="submit"
-        class="max-w-40 self-end rounded border border-gray-300 px-3 py-1 bg-blue-500 text-white">Envoyer</button>
+        class="max-w-40 self-end rounded border border-gray-300 px-3 py-1 bg-blue-800 text-white">Envoyer</button>
 </form>
 {% endblock  %}

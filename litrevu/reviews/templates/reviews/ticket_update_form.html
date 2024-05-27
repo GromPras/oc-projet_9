@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1 class="text-center text-xl font-bold">Poster un ticket:</h1>
 <form action="" method="post" class="flex flex-col gap-2 w-full" enctype='multipart/form-data'>
     {% csrf_token %}
     <span class="text-red-500">
@@ -39,6 +40,6 @@
         </span>
     </div>
     <button type="submit"
-        class="max-w-40 self-end rounded border border-gray-300 px-3 py-1 bg-blue-500 text-white">Envoyer</button>
+        class="max-w-40 self-end rounded border border-gray-300 px-3 py-1 bg-blue-800 text-white">Envoyer</button>
 </form>
 {% endblock  %}

@@ -58,6 +58,40 @@ class FeedView(LoginRequiredMixin, ListView):
         return context
 
 
+class PostsView(LoginRequiredMixin, ListView):
+    template_name = "reviews/index.html"
+    context_object_name = "feed"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["posts"] = True
+        return context
+
+    def get_queryset(self):
+        current_user = self.request.user
+        ticket_list = Ticket.objects.filter(user=current_user).order_by(
+            "time_created"
+        )
+        reviews_list = Review.objects.filter(user=current_user).order_by(
+            "time_created"
+        )
+        for r in reviews_list:
+            if r.user.id == current_user.id:
+                for ticket in ticket_list:
+                    if ticket.id == r.ticket.id:
+                        ticket.responded = True
+                    if ticket.image is None:
+                        ticket.image.url = "ticket_placeholder.webp"
+
+        feed = sorted(
+            chain(ticket_list, reviews_list),
+            key=lambda i: i.time_created,
+            reverse=True,
+        )
+
+        return feed
+
+
 class NewTicketView(LoginRequiredMixin, CreateView):
     model = Ticket
     form_class = NewTicketForm

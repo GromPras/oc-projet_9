@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "authentication",
+    "community",
     "tailwind",
     "theme",
     "django_browser_reload",
@@ -136,6 +137,7 @@ INTERNAL_IPS = ["127.0.0.1"]
 TAILWIND_APP_NAME = "theme"
 
 AUTH_USER_MODEL = "authentication.User"
+LOGIN_URL = "/"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

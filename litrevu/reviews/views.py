@@ -76,6 +76,7 @@ class UpdateTicketView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("reviews:feed")
 
 
+# TODO: rewrite view as Class
 @login_required(login_url="authentication/signin")
 def NewTicketReviewView(request, ticket_id=None):
     review_model = Review

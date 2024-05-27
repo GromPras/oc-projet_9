@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex flex-col gap-8">
+    <h1>Suivre d'autres utilisateurs</h1>
+    <form action="" method="GET" class="flex flex-col gap-2 w-full">
+        {{ search_form }}
+
+        <button type="submit"
+            class="max-w-40 self-end rounded border border-gray-300 px-3 py-1 bg-blue-500 text-white">Rechercher</button>
+    </form>
+
+    <div class="flex flex-col gap-4">
+        <h2>Résultats: </h2>
+        {% if results %}
+        {% for r in results %}
+        {% include 'community/user_card.html' with user=r.user followed=r.followed %}
+        {% endfor %}
+        {% elif searched %}
+        <h3>
+            Aucun utilisateur n'est enregistré avec ce nom.
+        </h3>
+        {% else %}
+        <h3>
+            Cherchez un utilisateur grâce à son nom et suivez le pour voir ses billets et critiques.
+        </h3>
+        {% endif %}
+    </div>
+
+    <div class="flex flex-col gap-4">
+        <h2>Abonnements:</h2>
+        {% if followed_users is not empty %}
+        {% for u in followed_users %}
+        <ul class="flex flex-col gap-4">
+            <li>
+                {% include 'community/user_card.html' with user=u followed=True %}
+            </li>
+        </ul>
+        {% endfor %}
+        {% else %}
+        <h3>Retrouvez ici les utilisateurs que vous suivez.</h3>
+        {% endif %}
+    </div>
+
+    <div class="flex flex-col gap-4">
+        <h2>Abonnés:</h2>
+        {% if followed_by is not empty %}
+        {% for u in followed_by %}
+        <ul class="flex flex-col gap-4">
+            <li>
+                {% include 'community/user_card.html' with user=u.user followed=u.followed %}
+            </li>
+        </ul>
+        {% endfor %}
+        {% else %}
+        <h3>Retrouvez ici les utilisateurs qui vous suivent.</h3>
+        {% endif %}
+    </div>
+</div>
+{% endblock  %}

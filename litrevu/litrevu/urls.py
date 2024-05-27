@@ -26,6 +26,7 @@ urlpatterns = [
     path("reviews/", include("reviews.urls")),
     path("accounts/", include("authentication.urls")),
     path("admin/", admin.site.urls),
+    path("community/", include("community.urls")),
     path("", SignInView.as_view(), name="signin"),
     path("__reload__/", include("django_browser_reload.urls")),
 ]

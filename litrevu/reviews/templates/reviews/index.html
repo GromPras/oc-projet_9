@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container flex flex-wrap justify-evenly items-center px-10 py-5">
-    <button class="rounded border border-gray-300 px-3 py-1 bg-blue-500 text-white  hover:bg-blue-700">
+    <button class="rounded border border-gray-300 px-3 py-1 bg-blue-800 text-white  hover:bg-blue-700">
         <a href="{% url 'reviews:new_ticket' %}">
             Demander une critique
         </a>
     </button>
-    <button
-        class="rounded border border-gray-300 px-3 py-1 bg-green-600 text-white hover:text-gray-900 hover:bg-green-400">
+    <button class="rounded border border-gray-300 px-3 py-1 bg-green-600 hover:text-gray-900 hover:bg-green-400">
         <a href="{% url 'reviews:new_ticket_review' %}">
             Poster une critique
         </a>
@@ -15,6 +14,8 @@
 </div>
 {% if posts %}
 <h1 class="text-center text-xl font-bold">Vos Posts:</h1>
+{% else %}
+<h1 class="text-center text-xl font-bold">Votre Flux:</h1>
 {% endif %}
 {% if feed %}
 <ul class="flex flex-col justify-start gap-8">

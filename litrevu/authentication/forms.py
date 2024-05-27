@@ -27,6 +27,7 @@ class SignUpForm(UserCreationForm):
             attrs={
                 "class": "text-input",
                 "placeholder": "Nom d'utilisateur",
+                "aria-describedby": "usernamehelptext",
             }
         ),
         help_text="Requis. 150 caractères maximum. Uniquement des lettres, nombres et les caractères « @ », « . », « + », « - » et « _ ».",
@@ -34,7 +35,11 @@ class SignUpForm(UserCreationForm):
     password1 = forms.CharField(
         required=True,
         widget=forms.PasswordInput(
-            attrs={"class": "password-input", "placeholder": "Mot de passe"}
+            attrs={
+                "class": "password-input",
+                "placeholder": "Mot de passe",
+                "aria-describedby": "pwhelptext",
+            }
         ),
         help_text="""Votre mot de passe ne peut pas trop ressembler à vos autres informations personnelles.
         Votre mot de passe doit contenir au minimum 8 caractères.
@@ -47,6 +52,7 @@ class SignUpForm(UserCreationForm):
             attrs={
                 "class": "password-input",
                 "placeholder": "Confirmation du mot de passe",
+                "aria-describedby": "pw2helptext",
             }
         ),
         help_text="Saisissez le même mot de passe que précédemment, pour vérification.",

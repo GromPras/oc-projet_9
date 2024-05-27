@@ -10,7 +10,7 @@
             <p>{{ post.description }}</p>
         </div>
         <div class="flex text-white justify-between">
-            <p class="italic place-self-end px-4 py-2 bg-blue-500 flex-1 last:rounded-br-xl">
+            <p class="italic place-self-end px-4 py-2 bg-blue-800 flex-1 last:rounded-br-xl">
                 {% if post.user.username != current_user.username %}
                 <span class="font-bold">
                     {{ post.user.username }}
@@ -30,7 +30,7 @@
             {% if not response and not post.responded %}
             <a href="{% url 'reviews:new_ticket_review' post.id %}">
                 <button
-                    class="bg-green-600 text-white hover:text-gray-900 hover:bg-green-400 flex items-center px-4 py-2 gap-4 last:rounded-br-xl">
+                    class="bg-green-600 hover:text-gray-900 hover:bg-green-400 flex items-center px-4 py-2 gap-4 text-black last:rounded-br-xl">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-reply" viewBox="0 0 16 16">
                         <path
@@ -43,7 +43,7 @@
             {% if post.user == current_user %}
             <a href="{% url 'reviews:update_ticket' post.id %}"
                 class="invisible group-hover/card:visible transition-all delay-150 group/button">
-                <button class="absolute top-0 right-0 m-8 rounded-full bg-blue-500 p-2 flex gap-2 items-center">
+                <button class="absolute top-0 right-0 m-8 rounded-full bg-blue-800 p-2 flex gap-2 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                         class="bi bi-pencil-square" viewBox="0 0 16 16">
                         <path

@@ -1,12 +1,14 @@
 from itertools import chain
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from authentication.models import User
+from community.models import UserFollows
 
 from .models import Review, Ticket
 from .forms import NewTicketForm, NewReviewForm, NewTicketReviewFormSet
@@ -19,10 +21,17 @@ class FeedView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         # TODO: filter by user followed
         current_user = self.request.user
-        ticket_list = Ticket.objects.all().order_by("time_created")
-        reviews_list = Review.objects.filter(user=current_user.id).order_by(
-            "time_created"
-        ) | Review.objects.filter(ticket__user=current_user.id).order_by(
+        followed_users = UserFollows.objects.filter(
+            user__id=current_user.id
+        ).values("followed_user__id")
+        ticket_list = Ticket.objects.filter(
+            Q(user__id__in=[followed_users]) | Q(user=current_user)
+        ).order_by("time_created")
+        reviews_list = Review.objects.filter(
+            Q(user__id__in=[followed_users]) | Q(user=current_user)
+        ).order_by("time_created") | Review.objects.filter(
+            ticket__user=current_user.id
+        ).order_by(
             "time_created"
         )
         for r in reviews_list:

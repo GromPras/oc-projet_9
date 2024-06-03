@@ -19,6 +19,11 @@ urlpatterns = [
         name="new_ticket_review",
     ),
     path(
+        "review/update/<int:pk>",
+        views.UpdateTicketReviewView.as_view(),
+        name="update_review",
+    ),
+    path(
         "review/new/<int:ticket_id>",
         views.NewTicketReviewView.as_view(),
         name="new_ticket_review",

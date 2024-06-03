@@ -12,7 +12,7 @@ from authentication.models import User
 from community.models import UserFollows
 
 from .models import Review, Ticket
-from .forms import NewTicketForm, NewReviewForm, NewTicketReviewFormSet
+from .forms import NewTicketForm, NewReviewForm
 
 
 class FeedView(LoginRequiredMixin, ListView):
@@ -148,9 +148,9 @@ class NewTicketReviewView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         request_user = self.request.user
-        # TODO: check if ticket_id
-        # if ticket_id -> load ticket
-        # else send form
+        print(request.POST)
+        if self.kwargs.get("ticket_id"):
+            self.ticket = Ticket.objects.get(pk=self.kwargs.get("ticket_id"))
         ticket_form = NewTicketForm(
             request.POST,
             request.FILES,
@@ -167,3 +167,17 @@ class NewTicketReviewView(LoginRequiredMixin, View):
             review.user_id = request_user.id
             review.save()
             return HttpResponseRedirect(reverse_lazy("reviews:feed"))
+
+
+class UpdateTicketReviewView(LoginRequiredMixin, UpdateView):
+    model = Review
+    form_class = NewReviewForm
+    context_object_name = "review_form"
+    template_name = "reviews/review_update_form.html"
+    success_url = reverse_lazy("reviews:feed")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["ticket"] = self.object.ticket
+        context["review_form"] = context.pop("form")
+        return context

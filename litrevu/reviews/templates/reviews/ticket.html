@@ -27,6 +27,7 @@
                 critique le
                 {{ post.time_created|date:"D d M Y" }}
             </p>
+            {% comment "Show 'respond' button if current user does not already responded" %}{% endcomment %}
             {% if not response and not post.responded %}
             <a href="{% url 'reviews:new_ticket_review' post.id %}">
                 <button

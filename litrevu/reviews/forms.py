@@ -62,18 +62,3 @@ class NewReviewForm(forms.ModelForm):
         widget=forms.RadioSelect(attrs={"class": "radio-input"}),
         choices=CHOICES,
     )
-
-
-class NewTicketReviewForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        exclude = ["user"]
-
-
-NewTicketReviewFormSet = inlineformset_factory(
-    Ticket,
-    Review,
-    form=NewTicketReviewForm,
-    fields=["rating", "headline", "body"],
-    extra=1,
-)

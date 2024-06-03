@@ -10,11 +10,11 @@
             class="max-w-40 self-end rounded border border-gray-300 px-3 py-1 bg-blue-800 text-white">Rechercher</button>
     </form>
 
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 border p-4">
         <h2>Résultats: </h2>
         {% if results %}
         {% for r in results %}
-        {% include 'community/user_card.html' with user=r.user followed=r.followed %}
+        {% include 'community/user_card.html' with user=r.user followed=r.followed blocked=r.blocked %}
         {% endfor %}
         {% elif searched %}
         <h3>
@@ -27,9 +27,9 @@
         {% endif %}
     </div>
 
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 border p-4">
         <h2>Abonnements:</h2>
-        {% if followed_users is not empty %}
+        {% if followed_users %}
         {% for u in followed_users %}
         <ul class="flex flex-col gap-4">
             <li>
@@ -42,9 +42,9 @@
         {% endif %}
     </div>
 
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 border p-4">
         <h2>Abonnés:</h2>
-        {% if followed_by is not empty %}
+        {% if followed_by %}
         {% for u in followed_by %}
         <ul class="flex flex-col gap-4">
             <li>
@@ -54,6 +54,21 @@
         {% endfor %}
         {% else %}
         <h3>Retrouvez ici les utilisateurs qui vous suivent.</h3>
+        {% endif %}
+    </div>
+
+    <div class="flex flex-col gap-4 border p-4">
+        <h2>Utilisateurs bloqués:</h2>
+        {% if blocked_users %}
+        {% for u in blocked_users %}
+        <ul class="flex flex-col gap-4">
+            <li>
+                {% include 'community/user_card.html' with user=u blocked=True %}
+            </li>
+        </ul>
+        {% endfor %}
+        {% else %}
+        <h3>Retrouvez ici les utilisateurs que vous avez bloqué.</h3>
         {% endif %}
     </div>
 </div>

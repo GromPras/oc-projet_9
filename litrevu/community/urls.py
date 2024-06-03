@@ -19,4 +19,10 @@ urlpatterns = [
         views.UnSubscribeView.as_view(),
         name="unsubscribe",
     ),
+    path(
+        "block/<int:user_id>",
+        views.BlockView.as_view(),
+        name="block",
+    ),
+    path("unblock/<int:user_id>", views.UnBlockView.as_view(), name="unblock"),
 ]

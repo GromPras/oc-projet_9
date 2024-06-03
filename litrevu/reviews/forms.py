@@ -22,7 +22,7 @@ class NewTicketForm(forms.ModelForm):
         widget=forms.Textarea(
             attrs={
                 "class": "text-area",
-                "placeholder": "Décrivez votre requête en quelques mots",
+                "placeholder": "Décrivez votre requête en quelques mots, ou faites un résumé du contenu",
             }
         ),
     )
@@ -53,7 +53,7 @@ class NewReviewForm(forms.ModelForm):
         widget=forms.Textarea(
             attrs={
                 "class": "text-area",
-                "placeholder": "Décrivez votre requête en quelques mots",
+                "placeholder": "Votre critique en réponse au billet",
             }
         ),
     )

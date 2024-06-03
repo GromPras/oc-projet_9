@@ -25,11 +25,11 @@
         </a>
         {% endif %}
     </div>
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 border-b p-2">
         <p class="rounded bg-blue-200 px-2 py-1">{{post.rating}} <span class="text-blue-800">🟊</span></p>
-        <h2 class="italic font-bold text-lg">{{ post.headline }}</h2>
+        <h2 class="italic font-bold text-lg uppercase">{{ post.headline }}</h2>
     </div>
-    <div class="p">
+    <div class="p-2 border-b">
         {{ post.body }}
     </div>
     {% include 'reviews/ticket.html' with post=post.ticket response=True %}

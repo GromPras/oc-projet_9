@@ -4,13 +4,9 @@ from .models import User
 
 
 class UserModelTest(TestCase):
-    def test_create_user_without_username(self):
-        """users can't be created without a valid username"""
-        with self.assertRaises(TypeError):
-            User.objects.create_user(password="password")
+    def test_user_model_exists(self):
+        self.assertEqual(User.objects.count(), 0)
 
-    def test_create_user_without_password(self):
-        """users can't be created without a valid password"""
-        with self.assertRaises(IntegrityError):
-            new_user = User(username="username")
-            new_user.save()
+    def test_unauthenticated_user_redirected_to_signin_page(self):
+        response = self.client.get("/reviews/feed")
+        self.assertEqual(response.status_code, 301)

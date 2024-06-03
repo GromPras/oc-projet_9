@@ -20,6 +20,15 @@ class FeedView(LoginRequiredMixin, ListView):
     context_object_name = "feed"
 
     def get_queryset(self):
+        """
+        Retrieves the queryset for the current view.
+
+        Returns:
+            list: The queryset containing the tickets and reviews to be displayed in the feed.The queryset is sorted by time created in descending order. The queryset is filtered by ther current users followed users and the users that created a review on the the current user's tickets.
+
+        Raises:
+            None
+        """
         current_user = self.request.user
         followed_users = UserFollows.objects.filter(
             user__id=current_user.id
@@ -50,10 +59,9 @@ class FeedView(LoginRequiredMixin, ListView):
         return feed
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get the context
+        """Add the authenticated user to the context."""
         context = super(FeedView, self).get_context_data(**kwargs)
         current_user = User.objects.get(pk=self.request.user.id)
-        # Create any data and add it to the context
         context["current_user"] = current_user
         return context
 
@@ -63,11 +71,21 @@ class PostsView(LoginRequiredMixin, ListView):
     context_object_name = "feed"
 
     def get_context_data(self, **kwargs):
+        """Add extra context to differenciate between the posts and feed views so they can share one template."""
         context = super().get_context_data(**kwargs)
         context["posts"] = True
         return context
 
     def get_queryset(self):
+        """
+        Retrieves the queryset for the current view.
+
+        Returns:
+            list: The queryset containing the tickets and reviews to be displayed in the feed. The queryset is sorted by time created in descending order. The queryset is filtered by the current user's tickets and reviews.
+
+        Raises:
+            None
+        """
         current_user = self.request.user
         ticket_list = Ticket.objects.filter(user=current_user).order_by(
             "time_created"
@@ -105,12 +123,6 @@ class NewTicketView(LoginRequiredMixin, CreateView):
         ticket.save()
         return HttpResponseRedirect(self.success_url)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            print(self.request.FILES)
-        return context
-
 
 class UpdateTicketView(LoginRequiredMixin, UpdateView):
     model = Ticket
@@ -124,6 +136,23 @@ class NewTicketReviewView(LoginRequiredMixin, View):
     ticket = None
 
     def get(self, request, *args, **kwargs):
+        """
+        Retrieves a ticket and its associated forms for review.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            HttpResponse: The rendered HTML response containing the review update form.
+
+        Raises:
+            ObjectDoesNotExist: If the ticket with the specified ID does not exist.
+
+        Description:
+           This function is the GET handler for the NewTicketReviewView class. It retrieves a ticket and its associated forms for review. If a ticket ID is provided in the URL parameters, it retrieves the ticket from the database using the provided ID. If no ticket ID is provided, it initializes the review form and ticket form with default values.
+        """
         if self.kwargs.get("ticket_id"):
             self.ticket = Ticket.objects.get(pk=self.kwargs.get("ticket_id"))
         review_form = None
@@ -147,18 +176,41 @@ class NewTicketReviewView(LoginRequiredMixin, View):
         )
 
     def post(self, request, *args, **kwargs):
+        """
+        Handles the HTTP POST request for creating a new ticket and review.
+
+        Parameters:
+            request (HttpRequest): The HTTP request object.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            HttpResponseRedirect: Redirects to the "reviews:feed" URL if the ticket and review are successfully created.
+
+        Raises:
+            None
+
+        Description:
+            This function is responsible for handling the HTTP POST request for creating a new ticket and review. It checks if a ticket ID is provided in the URL parameters. If so, it retrieves the corresponding ticket from the database.
+            If not, it creates a new instance of the NewTicketForm with the request data and files. If the form is valid, it saves the ticket, sets the user ID, and saves it to the database.
+
+            After that, it creates a new instance of the NewReviewForm with the request data. If the form is valid, it saves the review, sets the ticket ID and user ID, and saves it to the database.
+
+            Finally, it redirects the user to the "reviews:feed" URL.
+
+        """
         request_user = self.request.user
-        print(request.POST)
         if self.kwargs.get("ticket_id"):
             self.ticket = Ticket.objects.get(pk=self.kwargs.get("ticket_id"))
-        ticket_form = NewTicketForm(
-            request.POST,
-            request.FILES,
-        )
-        if ticket_form.is_valid():
-            self.ticket = ticket_form.save(commit=False)
-            self.ticket.user_id = request_user.id
-            self.ticket.save()
+        else:
+            ticket_form = NewTicketForm(
+                request.POST,
+                request.FILES,
+            )
+            if ticket_form.is_valid():
+                self.ticket = ticket_form.save(commit=False)
+                self.ticket.user_id = request_user.id
+                self.ticket.save()
 
         review_form = NewReviewForm(request.POST)
         if review_form.is_valid():

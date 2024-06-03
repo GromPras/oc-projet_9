@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-between gap-4">
+    <h1 class="text-xl font-bold">Erreur</h1>
+    <h2 class="text-lg">Vous n'êtes pas autorisé à faire ça
+    </h2>
+    <a href="{% url 'reviews:feed' %}" class="text-white bg-green-800 rounded px-4 py-2">Retour à l'accueil</a>
+</div>
+{% endblock  %}

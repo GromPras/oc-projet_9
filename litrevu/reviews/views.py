@@ -123,13 +123,13 @@ class NewTicketReviewView(LoginRequiredMixin, View):
     review_model = Review
     ticket = None
 
-    def get(self, request):
-        if self.request.GET.get("ticket_id"):
-            self.ticket = Ticket.objects.get(pk=ticket_id)
+    def get(self, request, *args, **kwargs):
+        if self.kwargs.get("ticket_id"):
+            self.ticket = Ticket.objects.get(pk=self.kwargs.get("ticket_id"))
         review_form = None
         ticket_form = None
         if self.ticket is not None:
-            review_form = NewReviewForm(initial={"ticket": ticket})
+            review_form = NewReviewForm(initial={"ticket": self.ticket})
         else:
             review_form = NewReviewForm()
             ticket_form = NewTicketForm()
@@ -146,21 +146,24 @@ class NewTicketReviewView(LoginRequiredMixin, View):
             },
         )
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         request_user = self.request.user
+        # TODO: check if ticket_id
+        # if ticket_id -> load ticket
+        # else send form
         ticket_form = NewTicketForm(
             request.POST,
             request.FILES,
         )
         if ticket_form.is_valid():
-            ticket = ticket_form.save(commit=False)
-            ticket.user_id = request_user.id
-            ticket.save()
+            self.ticket = ticket_form.save(commit=False)
+            self.ticket.user_id = request_user.id
+            self.ticket.save()
 
         review_form = NewReviewForm(request.POST)
         if review_form.is_valid():
             review = review_form.save(commit=False)
-            review.ticket_id = ticket.id
+            review.ticket_id = self.ticket.id
             review.user_id = request_user.id
             review.save()
             return HttpResponseRedirect(reverse_lazy("reviews:feed"))

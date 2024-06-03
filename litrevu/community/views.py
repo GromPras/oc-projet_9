@@ -18,15 +18,6 @@ class SearchUserView(LoginRequiredMixin, View):
     followed_users = []
     followed_by = []
 
-    def post(self, request):
-        # retrieve users from search input
-        return HttpResponseRedirect(
-            reverse_lazy(
-                "community:search",
-                kwargs={"username": request.POST["username"]},
-            )
-        )
-
     def get(self, request, *args, **kwargs):
         username = self.request.GET.get("username")
         current_user = self.request.user
@@ -83,7 +74,6 @@ class UnSubscribeView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         unsubscribe_from = User.objects.get(pk=kwargs.get("user_id"))
         current_user = self.request.user
-        print(current_user.id, unsubscribe_from.id)
         subscription = UserFollows.objects.get(
             user__id=current_user.id, followed_user__id=unsubscribe_from.id
         )

@@ -70,12 +70,6 @@ class PostsView(LoginRequiredMixin, ListView):
     template_name = "reviews/index.html"
     context_object_name = "feed"
 
-    def get_context_data(self, **kwargs):
-        """Add extra context to differenciate between the posts and feed views so they can share one template."""
-        context = super().get_context_data(**kwargs)
-        context["posts"] = True
-        return context
-
     def get_queryset(self):
         """
         Retrieves the queryset for the current view.
@@ -114,6 +108,7 @@ class PostsView(LoginRequiredMixin, ListView):
         context = super(PostsView, self).get_context_data(**kwargs)
         current_user = User.objects.get(pk=self.request.user.id)
         context["current_user"] = current_user
+        context["posts"] = True
         return context
 
 
@@ -250,5 +245,17 @@ class UpdateTicketReviewView(
         return context
 
 
-# TODO
-# delete ticket and review
+class DeleteTicketView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Ticket
+    success_url = reverse_lazy("reviews:posts")
+
+    def test_func(self):
+        return self.get_object().user == self.request.user
+
+
+class DeleteReviewView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Review
+    success_url = reverse_lazy("reviews:posts")
+
+    def test_func(self):
+        return self.get_object().user == self.request.user

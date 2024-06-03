@@ -36,11 +36,23 @@
     {% endfor %}
 </ul>
 {% else %}
-<div class="container text-center">
-    <h2>Aucune critique dans votre flux...</h2>
-    <p>
-        Essayez de suivre d'autres utilisateurs ou bien créez une critique ou un billet.
-    </p>
+<div class="">
+
+    {% if posts %}
+    <div class="container text-center">
+        <h2>Vous n'avez encore rien posté</h2>
+        <p>
+            Créer un billet ou une critique pour les retrouver ici.
+        </p>
+    </div>
+    {% else %}
+    <div class="container text-center">
+        <h2>Aucune critique dans votre flux...</h2>
+        <p>
+            Essayez de suivre d'autres utilisateurs ou bien créez une critique ou un billet.
+        </p>
+    </div>
+    {% endif %}
 </div>
 {% endif %}
 {% endblock  %}

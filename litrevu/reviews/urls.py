@@ -29,4 +29,14 @@ urlpatterns = [
         name="new_ticket_review",
     ),
     path("posts/", views.PostsView.as_view(), name="posts"),
+    path(
+        "review/delete/<int:pk>",
+        views.DeleteReviewView.as_view(),
+        name="delete_review",
+    ),
+    path(
+        "ticket/delete/<int:pk>",
+        views.DeleteTicketView.as_view(),
+        name="delete_ticket",
+    ),
 ]

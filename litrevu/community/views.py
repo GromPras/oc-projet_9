@@ -18,6 +18,9 @@ class SearchUserView(LoginRequiredMixin, View):
     followed_users = []
     followed_by = []
 
+    # TODO
+    # blacklist user to prevent them to follow you
+
     def get(self, request, *args, **kwargs):
         username = self.request.GET.get("username")
         current_user = self.request.user

@@ -1,11 +1,11 @@
 from itertools import chain
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from authentication.models import User
@@ -109,6 +109,13 @@ class PostsView(LoginRequiredMixin, ListView):
 
         return feed
 
+    def get_context_data(self, **kwargs):
+        """Add the authenticated user to the context."""
+        context = super(PostsView, self).get_context_data(**kwargs)
+        current_user = User.objects.get(pk=self.request.user.id)
+        context["current_user"] = current_user
+        return context
+
 
 class NewTicketView(LoginRequiredMixin, CreateView):
     model = Ticket
@@ -124,11 +131,14 @@ class NewTicketView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class UpdateTicketView(LoginRequiredMixin, UpdateView):
+class UpdateTicketView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Ticket
     form_class = NewTicketForm
     template_name = "reviews/ticket_update_form.html"
     success_url = reverse_lazy("reviews:feed")
+
+    def test_func(self):
+        return self.get_object().user == self.request.user
 
 
 class NewTicketReviewView(LoginRequiredMixin, View):
@@ -221,15 +231,24 @@ class NewTicketReviewView(LoginRequiredMixin, View):
             return HttpResponseRedirect(reverse_lazy("reviews:feed"))
 
 
-class UpdateTicketReviewView(LoginRequiredMixin, UpdateView):
+class UpdateTicketReviewView(
+    LoginRequiredMixin, UserPassesTestMixin, UpdateView
+):
     model = Review
     form_class = NewReviewForm
     context_object_name = "review_form"
     template_name = "reviews/review_update_form.html"
     success_url = reverse_lazy("reviews:feed")
 
+    def test_func(self):
+        return self.get_object().user == self.request.user
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["ticket"] = self.object.ticket
         context["review_form"] = context.pop("form")
         return context
+
+
+# TODO
+# delete ticket and review

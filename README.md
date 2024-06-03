@@ -34,14 +34,15 @@ c:\>c:\Python3\python -m venv c:\path\to\myenv
 
 Activer l'environement virtuel :
 
-````sh
+```sh
 source {/path/to/virtual/environment}/bin/activate
+```
 
 Sur Windows, appelez la commande venv comme suit :
 
 ```sh
 C:\> <venv>\Scripts\activate.bat
-````
+```
 
 Installez les packages requis :
 

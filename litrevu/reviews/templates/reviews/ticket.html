@@ -29,10 +29,10 @@
             </p>
             {% if post.user == current_user %}
             <!-- Show update and delete btn on ticket if current user is the author -->
-            <div class="flex gap-2 bg-blue-800">
-                <a href="{% url 'reviews:update_ticket' post.id %}" class=" text-white">
+            <div class="flex gap-2 bg-blue-800 border-l border-gray-400">
+                <a href="{% url 'reviews:update_ticket' post.id %}" class=" text-white h-full">
                     <button
-                        class="px-4 py-2  bg-blue-800 p-2 flex gap-2 items-center hover:bg-white hover:text-blue-800 transition-all delay-150">
+                        class="px-4 py-2  bg-blue-800 p-2 flex gap-2 items-center hover:bg-white hover:text-blue-800 transition-all delay-150 h-full">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                             class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path
@@ -46,9 +46,9 @@
                     </button>
                 </a>
 
-                <a href="{% url 'reviews:delete_ticket' post.id %}" class=" text-white">
+                <a href="{% url 'reviews:delete_ticket' post.id %}" class=" text-white h-full">
                     <button
-                        class="px-4 py-2 bg-red-800 p-2 flex gap-2 items-center hover:bg-red-500 hover:text-black transition-all delay-150">
+                        class="px-4 py-2 bg-red-800 p-2 flex gap-2 items-center hover:bg-red-500 hover:text-black transition-all delay-150 h-full">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-trash3-fill" viewBox="0 0 16 16">
                             <path
@@ -65,7 +65,7 @@
             {% if not response and not post.responded %}
             <a href="{% url 'reviews:new_ticket_review' post.id %}">
                 <button
-                    class="bg-green-500 hover:text-gray-900 hover:bg-green-300 flex items-center px-4 py-2 gap-4 text-black last:rounded-br-xl">
+                    class="bg-green-500 hover:text-gray-900 hover:bg-green-300 flex items-center px-4 py-2 gap-4 text-black last:rounded-br-xl h-full">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                         class="bi bi-reply" viewBox="0 0 16 16">
                         <path

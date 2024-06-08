@@ -119,7 +119,7 @@ class BlockView(LoginRequiredMixin, UserPassesTestMixin, View):
         return False
 
     def get(self, request, *args, **kwargs):
-        block_user = User.objects.get(pk=kwargs.get("user_id"))
+        block_user = User.objects.get(pk=self.kwargs.get("user_id"))
         new_userblock = UserBlocks(user=request.user, blocked_user=block_user)
         new_userblock.save()
         return HttpResponseRedirect(reverse_lazy("community:search"))
@@ -130,7 +130,7 @@ class UnBlockView(LoginRequiredMixin, UserPassesTestMixin, View):
     block = None
 
     def test_func(self):
-        unblock_user = User.objects.get(pk=kwargs.get("user_id"))
+        unblock_user = User.objects.get(pk=self.kwargs.get("user_id"))
         if unblock_user and unblock_user != self.request.user:
             self.block = UserBlocks.objects.get(
                 user__id=self.request.user.id,
@@ -141,5 +141,5 @@ class UnBlockView(LoginRequiredMixin, UserPassesTestMixin, View):
         return False
 
     def get(self, request, *args, **kwargs):
-        block.delete()
+        self.block.delete()
         return HttpResponseRedirect(reverse_lazy("community:search"))

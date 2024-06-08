@@ -6,7 +6,7 @@
             {% else %}
             {{ post.user }} a
             {% endif %}
-            publié une critique le <span class="underline">{{ post.time_created|date:"D d M Y"}}</span>
+            publié une critique le <span class="border-b">{{ post.time_created|date:"D d M Y"}}</span>
         </p>
         {% if post.user == current_user %}
         <div class="flex gap-2">

@@ -135,6 +135,11 @@ class UpdateTicketView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         return self.get_object().user == self.request.user
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["update"] = True
+        return context
+
 
 class NewTicketReviewView(LoginRequiredMixin, View):
     review_model = Review
@@ -242,6 +247,7 @@ class UpdateTicketReviewView(
         context = super().get_context_data(**kwargs)
         context["ticket"] = self.object.ticket
         context["review_form"] = context.pop("form")
+        context["update"] = True
         return context
 
 

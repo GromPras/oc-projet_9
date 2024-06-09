@@ -66,3 +66,12 @@ Si vous avez un problème avec la création de l'environnement consultez la docu
 cd litrevu
 python3 manage.py runserver
 ```
+
+#### Pour lancer le serveur de développement de tailwind
+
+Dans un nouveau terminal, ou nouvel onglet, répétez les étapes pour jusqu'à activer l'environement virtuel, puis:
+
+```sh
+cd litrevu
+python3 manage.py tailwind start
+```

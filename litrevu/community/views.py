@@ -121,11 +121,15 @@ class BlockView(LoginRequiredMixin, UserPassesTestMixin, View):
         block_user = User.objects.get(pk=self.kwargs.get("user_id"))
         new_userblock = UserBlocks(user=request.user, blocked_user=block_user)
         new_userblock.save()
-        previous_subscription = UserFollows.objects.get(
-            user=block_user,
-            followed_user=request.user,
-        )
-        previous_subscription.delete()
+        try:
+            previous_subscription = UserFollows.objects.get(
+                user=block_user,
+                followed_user=request.user,
+            )
+            if previous_subscription:
+                previous_subscription.delete()
+        except UserFollows.DoesNotExist:
+            pass
         return HttpResponseRedirect(reverse_lazy("community:search"))
 
 

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="flex flex-col items-center justify-between gap-4">
     <h1 class="text-lg font-bold">Supprimer le billet</h1>
-    {% include 'reviews/ticket.html' with post=object %}
+    {% include 'reviews/ticket.html' with post=object response=True %}
     <form method="post" class="flex flex-col items-center justify-between gap-4">
         {% csrf_token %}
         <h2>Êtes-vous sûr(e) de vouloir supprimer ce billet?</h2>

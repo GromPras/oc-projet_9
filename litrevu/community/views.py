@@ -101,7 +101,6 @@ class UnSubscribeView(LoginRequiredMixin, UserPassesTestMixin, View):
                 user__id=self.request.user.id,
                 followed_user__id=self.unsubscribe_from.id,
             )
-            print(self.subscription)
             if self.subscription.user == self.request.user:
                 return True
         return False
@@ -122,6 +121,11 @@ class BlockView(LoginRequiredMixin, UserPassesTestMixin, View):
         block_user = User.objects.get(pk=self.kwargs.get("user_id"))
         new_userblock = UserBlocks(user=request.user, blocked_user=block_user)
         new_userblock.save()
+        previous_subscription = UserFollows.objects.get(
+            user=block_user,
+            followed_user=request.user,
+        )
+        previous_subscription.delete()
         return HttpResponseRedirect(reverse_lazy("community:search"))
 
 

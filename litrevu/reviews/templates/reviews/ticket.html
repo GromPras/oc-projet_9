@@ -25,7 +25,8 @@
                 demandé
                 une
                 critique le
-                {{ post.time_created|date:"D d M Y" }}
+                <span class="border-b">{{ post.time_created|date:"D d M Y"}}</span> à <span
+                    class="border-b">{{ post.time_created|date:"G:i"}}</span>
             </p>
             {% if post.user == current_user %}
             <!-- Show update and delete btn on ticket if current user is the author -->
